@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,9 +33,12 @@ export default async function AuditLogPage({ searchParams }: PageProps) {
   const currentPage = parseInt(page ?? "1");
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const where: Record<string, unknown> = {};
-  if (from) where.timestamp = { ...(where.timestamp as object ?? {}), gte: new Date(from) };
-  if (to) where.timestamp = { ...(where.timestamp as object ?? {}), lte: new Date(to) };
+  const where: Prisma.AuditLogWhereInput = {};
+  if (from || to) {
+    where.timestamp = {};
+    if (from) (where.timestamp as Prisma.DateTimeFilter).gte = new Date(from);
+    if (to) (where.timestamp as Prisma.DateTimeFilter).lte = new Date(to);
+  }
 
   const [total, logs] = await Promise.all([
     prisma.auditLog.count({ where }),
