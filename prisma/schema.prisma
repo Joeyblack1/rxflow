@@ -1,0 +1,497 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  PRESCRIBER
+  NURSE
+  PHARMACIST
+  PHARMACY_TECHNICIAN
+  ADMIN
+  SUPER_ADMIN
+  READ_ONLY
+}
+
+enum PrescriptionStatus {
+  DRAFT
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+  DISCONTINUED
+  COMPLETED
+  EXPIRED
+}
+
+enum PrescriptionType {
+  REGULAR
+  ONCE_ONLY
+  AS_REQUIRED
+  SHORT_COURSE
+  DISCHARGE
+  OUTPATIENT
+}
+
+enum CDSchedule {
+  NON_CD
+  SCHEDULE_2
+  SCHEDULE_3
+  SCHEDULE_4_PART1
+  SCHEDULE_4_PART2
+  SCHEDULE_5
+}
+
+enum AdministrationOutcome {
+  GIVEN
+  WITHHELD
+  OMITTED
+  PATIENT_REFUSED
+  NOT_AVAILABLE
+  PATIENT_ABSENT
+  SEE_NOTES
+}
+
+enum AllergySeverity {
+  MILD
+  MODERATE
+  SEVERE
+  ANAPHYLAXIS
+  UNKNOWN
+}
+
+enum AllergyStatus {
+  ACTIVE
+  INACTIVE
+  RESOLVED
+  ENTERED_IN_ERROR
+}
+
+enum AllergyType {
+  ALLERGY
+  INTOLERANCE
+  SIDE_EFFECT
+}
+
+enum InteractionSeverity {
+  INFORMATION
+  MILD
+  MODERATE
+  SEVERE
+  CONTRAINDICATED
+}
+
+enum SettingType {
+  COMMUNITY_MH
+  CARE_HOME
+  ACUTE_WARD
+  OUTPATIENT
+  GP
+}
+
+enum IntegrationSystem {
+  RIO
+  SYSTEMONE
+  EMIS
+  PDS
+}
+
+enum ClozapineTrafficLight {
+  GREEN
+  AMBER
+  RED
+  INCONCLUSIVE
+}
+
+enum FrequencyCode {
+  OD
+  BD
+  TDS
+  QDS
+  OM
+  ON
+  WEEKLY
+  FORTNIGHTLY
+  MONTHLY
+  STAT
+  PRN
+  VARIABLE
+}
+
+enum RouteCode {
+  ORAL
+  SUBLINGUAL
+  BUCCAL
+  IM
+  IV
+  SC
+  TOPICAL
+  PATCH
+  INHALED
+  NASAL
+  RECTAL
+  INTRATHECAL
+  OTHER
+}
+
+model Organisation {
+  id          String      @id @default(cuid())
+  name        String
+  odsCode     String      @unique
+  settingType SettingType
+  address     String?
+  phone       String?
+  logoUrl     String?
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  users     User[]
+  wards     Ward[]
+  formulary FormularyItem[]
+  settings  OrgSetting[]
+
+  @@index([odsCode])
+}
+
+model OrgSetting {
+  id             String       @id @default(cuid())
+  organisationId String
+  key            String
+  value          String
+  updatedAt      DateTime     @updatedAt
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+
+  @@unique([organisationId, key])
+}
+
+model Ward {
+  id             String       @id @default(cuid())
+  organisationId String
+  name           String
+  code           String
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  beds           Bed[]
+
+  @@index([organisationId])
+}
+
+model Bed {
+  id         String      @id @default(cuid())
+  wardId     String
+  bedNumber  String
+  isOccupied Boolean     @default(false)
+  ward       Ward        @relation(fields: [wardId], references: [id])
+  admissions Admission[]
+}
+
+model User {
+  id             String    @id @default(cuid())
+  organisationId String
+  email          String    @unique
+  passwordHash   String
+  name           String
+  role           UserRole
+  gmcNumber      String?
+  prescriberType String?
+  isActive       Boolean   @default(true)
+  lastLoginAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organisation     Organisation           @relation(fields: [organisationId], references: [id])
+  prescriptions    Prescription[]         @relation("PrescriberPrescriptions")
+  verifications    Prescription[]         @relation("PharmacistVerifications")
+  administrations  MAREntry[]             @relation("AdministeredBy")
+  witnessedCDs     MAREntry[]             @relation("WitnessedBy")
+  auditLogs        AuditLog[]
+  clozapineResults ClozapineResultEntry[] @relation("EnteredBy")
+  sessions         UserSession[]
+
+  @@index([organisationId, role])
+}
+
+model UserSession {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+}
+
+model Patient {
+  id                String    @id @default(cuid())
+  nhsNumber         String    @unique
+  hospitalNumber    String?
+  firstName         String
+  lastName          String
+  dateOfBirth       DateTime
+  sex               String
+  addressLine1      String?
+  addressLine2      String?
+  city              String?
+  postcode          String?
+  gpPracticeOdsCode String?
+  gpName            String?
+  weightKg          Float?
+  heightCm          Float?
+  renalFunction     String?
+  isDeceased        Boolean   @default(false)
+  deceasedAt        DateTime?
+  rioId             String?
+  systemOneId       String?
+  emisId            String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  allergies           Allergy[]
+  prescriptions       Prescription[]
+  admissions          Admission[]
+  clozapineMonitoring ClozapineMonitoring?
+  auditLogs           AuditLog[]
+
+  @@index([nhsNumber])
+  @@index([lastName, dateOfBirth])
+}
+
+model Admission {
+  id           String    @id @default(cuid())
+  patientId    String
+  bedId        String
+  wardId       String
+  admittedAt   DateTime  @default(now())
+  dischargedAt DateTime?
+  isActive     Boolean   @default(true)
+  patient      Patient   @relation(fields: [patientId], references: [id])
+  bed          Bed       @relation(fields: [bedId], references: [id])
+
+  @@index([patientId, isActive])
+}
+
+model Allergy {
+  id                 String          @id @default(cuid())
+  patientId          String
+  allergyType        AllergyType
+  status             AllergyStatus   @default(ACTIVE)
+  severity           AllergySeverity
+  substanceName      String
+  snomedCode         String?
+  dmdVtmId           String?
+  reactionType       String?
+  reactionSnomedCode String?
+  notes              String?
+  onsetDate          DateTime?
+  recordedAt         DateTime        @default(now())
+  recordedById       String?
+  patient            Patient         @relation(fields: [patientId], references: [id])
+
+  @@index([patientId, status])
+}
+
+model DMDProduct {
+  id            String     @id @default(cuid())
+  vtmId         String?
+  vmpId         String     @unique
+  ampId         String?
+  name          String
+  brandName     String?
+  formulation   String?
+  strengthText  String?
+  unitOfMeasure String?
+  snomedCode    String?
+  cdSchedule    CDSchedule @default(NON_CD)
+  blackTriangle Boolean    @default(false)
+  highAlert     Boolean    @default(false)
+  isActive      Boolean    @default(true)
+  lastSyncedAt  DateTime?
+
+  formularyItems    FormularyItem[]
+  prescriptionItems PrescriptionItem[]
+
+  @@index([name])
+  @@index([vtmId])
+}
+
+model FormularyItem {
+  id             String       @id @default(cuid())
+  organisationId String
+  dmdProductId   String
+  isRestricted   Boolean      @default(false)
+  restrictions   String?
+  addedAt        DateTime     @default(now())
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  dmdProduct     DMDProduct   @relation(fields: [dmdProductId], references: [id])
+
+  @@unique([organisationId, dmdProductId])
+}
+
+model Prescription {
+  id                   String             @id @default(cuid())
+  patientId            String
+  prescriberId         String
+  pharmacistId         String?
+  status               PrescriptionStatus @default(DRAFT)
+  prescriptionType     PrescriptionType   @default(REGULAR)
+  prescribedAt         DateTime           @default(now())
+  verifiedAt           DateTime?
+  startDate            DateTime
+  endDate              DateTime?
+  discontinuedAt       DateTime?
+  discontinuedReason   String?
+  indication           String?
+  indicationSnomedCode String?
+  clinicalNotes        String?
+  cdSchedule           CDSchedule         @default(NON_CD)
+  cdForm               String?
+  cdTotalQuantity      String?
+  cdInstalment         Boolean            @default(false)
+  cdInstalmentDetails  String?
+  voiceTranscriptId    String?
+  voiceDraftReviewed   Boolean            @default(false)
+  sourceSystem         IntegrationSystem?
+  sourceId             String?
+  fhirId               String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  patient    Patient            @relation(fields: [patientId], references: [id])
+  prescriber User               @relation("PrescriberPrescriptions", fields: [prescriberId], references: [id])
+  pharmacist User?              @relation("PharmacistVerifications", fields: [pharmacistId], references: [id])
+  items      PrescriptionItem[]
+  auditLogs  AuditLog[]
+
+  @@index([patientId, status])
+  @@index([prescribedAt])
+}
+
+model PrescriptionItem {
+  id                  String        @id @default(cuid())
+  prescriptionId      String
+  dmdProductId        String
+  dose                String
+  doseQuantity        Float?
+  doseUnit            String?
+  route               RouteCode
+  frequency           FrequencyCode
+  frequencyText       String?
+  prnMinIntervalHours Int?
+  prnMaxDailyDose     String?
+  prnIndication       String?
+  quantityToSupply    Float?
+  quantityUnit        String?
+  daysSupply          Int?
+  adminTimes          String[]
+  crushable           Boolean?
+  withFood            Boolean?
+  pharmacistNotes     String?
+  isActive            Boolean       @default(true)
+  createdAt           DateTime      @default(now())
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id])
+  dmdProduct   DMDProduct   @relation(fields: [dmdProductId], references: [id])
+  marEntries   MAREntry[]
+
+  @@index([prescriptionId])
+}
+
+model MAREntry {
+  id                 String                 @id @default(cuid())
+  prescriptionItemId String
+  scheduledAt        DateTime
+  administeredAt     DateTime?
+  outcome            AdministrationOutcome?
+  doseGiven          String?
+  administeredById   String?
+  witnessedById      String?
+  reasonCode         String?
+  reasonText         String?
+  applicationSite    String?
+  patchNumber        String?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+
+  prescriptionItem PrescriptionItem @relation(fields: [prescriptionItemId], references: [id])
+  administeredBy   User?            @relation("AdministeredBy", fields: [administeredById], references: [id])
+  witnessedBy      User?            @relation("WitnessedBy", fields: [witnessedById], references: [id])
+
+  @@index([prescriptionItemId, scheduledAt])
+  @@index([scheduledAt])
+}
+
+model DrugInteraction {
+  id           String              @id @default(cuid())
+  drug1VtmId   String
+  drug2VtmId   String
+  severity     InteractionSeverity
+  mechanism    String?
+  effect       String
+  management   String?
+  sourceRef    String?
+  lastReviewed DateTime?
+
+  @@unique([drug1VtmId, drug2VtmId])
+  @@index([drug1VtmId])
+  @@index([drug2VtmId])
+}
+
+model ClozapineMonitoring {
+  id             String                @id @default(cuid())
+  patientId      String                @unique
+  cpmsNumber     String?
+  registeredAt   DateTime?
+  currentStatus  ClozapineTrafficLight @default(GREEN)
+  lastResultDate DateTime?
+  patient        Patient               @relation(fields: [patientId], references: [id])
+  results        ClozapineResultEntry[]
+}
+
+model ClozapineResultEntry {
+  id                   String                @id @default(cuid())
+  monitoringId         String
+  enteredById          String
+  resultDate           DateTime
+  neutrophilCount      Float
+  wbcCount             Float
+  result               ClozapineTrafficLight
+  dispensingAuthorised Boolean               @default(false)
+  authReason           String?
+  notes                String?
+  createdAt            DateTime              @default(now())
+
+  monitoring ClozapineMonitoring @relation(fields: [monitoringId], references: [id])
+  enteredBy  User                @relation("EnteredBy", fields: [enteredById], references: [id])
+
+  @@index([monitoringId, resultDate])
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  timestamp      DateTime @default(now())
+  userId         String?
+  patientId      String?
+  prescriptionId String?
+  action         String
+  resourceType   String
+  resourceId     String
+  previousState  Json?
+  newState       Json?
+  ipAddress      String?
+  userAgent      String?
+  isCDAction     Boolean  @default(false)
+
+  user         User?         @relation(fields: [userId], references: [id])
+  patient      Patient?      @relation(fields: [patientId], references: [id])
+  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
+
+  @@index([timestamp])
+  @@index([patientId])
+  @@index([userId])
+  @@index([isCDAction, timestamp])
+}

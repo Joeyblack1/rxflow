@@ -2,6 +2,21 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+:root {
+  --nhs-blue: #005EB8;
+  --nhs-dark-blue: #003087;
+  --nhs-bright-blue: #0072CE;
+  --nhs-light-blue: #41B6E6;
+  --nhs-aqua: #00A9CE;
+  --nhs-green: #009639;
+  --nhs-warm-yellow: #FFB81C;
+  --nhs-red: #DA291C;
+  --nhs-white: #FFFFFF;
+  --nhs-grey1: #425563;
+  --nhs-grey2: #768692;
+  --nhs-grey3: #E8EDEE;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
