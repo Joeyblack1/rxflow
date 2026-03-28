@@ -36,6 +36,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Loader2, AlertTriangle } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -225,7 +226,30 @@ export default function AllergiesPage({ params }: PageProps) {
   }
 
   if (loading) {
-    return <div className="text-muted-foreground text-sm">Loading allergies…</div>;
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-9 w-32" />
+        </div>
+        <Card>
+          <CardContent className="p-0">
+            <div className="p-4 space-y-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex gap-4 items-center">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-5 w-16 rounded-full" />
+                  <Skeleton className="h-4 w-40" />
+                  <Skeleton className="h-5 w-14 rounded-full" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (

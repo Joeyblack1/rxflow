@@ -7,13 +7,10 @@
 | 3 | [ideo] | Medium | 2026-03-27 | Consider Vercel Hobby (free) or Pro plan — 100 deploys/day free tier limit will bottleneck active dev |
 | 5 | [arch] | High | 2026-03-27 | Add `prisma generate` to Neon/seed setup docs — DIRECT_URL needed for migrations on Neon |
 | 6 | [link] | High | 2026-03-27 | CliniVoice-AI webhook endpoint `/api/voice` is ready — update CliniVoice to POST to live URL with HMAC secret |
-| 7 | [sec] | High | 2026-03-27 | Add Neon row-level security on AuditLog table to make it immutable — required for DTAC/DCB0129 NHS compliance |
 | 8 | [arch] | Medium | 2026-03-27 | Add Clinical Safety Case Record and Hazard Log (DCB0129 mandatory before any NHS trust pilot) |
 | 9 | [fix] | Medium | 2026-03-27 | Add loading skeletons to allergies page client component |
 | 10 | [test] | Medium | 2026-03-27 | Add Playwright E2E tests: prescribe → verify → administer full flow |
-| 11 | [sec] | High | 2026-03-28 | Add "change password on first login" flow — seed hash is a known public test hash, must rotate before NHS trust pilot |
 | 12 | [arch] | Medium | 2026-03-28 | Switch schema ID default from cuid() to uuid() for consistency with seed data (currently mixed formats) |
-| 13 | [fix] | High | 2026-03-28 | Add /api/health route returning {db:"ok"} to verify DB connectivity without full login attempt |
 | 14 | [link] | High | 2026-03-28 | Update CliniVoice-AI webhook config: RXFLOW_WEBHOOK_URL=https://rxflow-kappa.vercel.app/api/voice |
 | 15 | [arch] | Medium | 2026-03-28 | Add Prisma Accelerate or switch to pooler once Supabase pooler confirmed working — direct connections exhaust 60-connection free-tier limit under load |
 | 16 | [arch] | High | 2026-03-28 | Write Clinical Safety Case Record + Hazard Log (DCB0129 legal requirement before any NHS trust pilot) |
@@ -22,6 +19,11 @@
 | 19 | [sec] | High | 2026-03-28 | Rotate AUTH_SECRET to proper openssl rand -base64 32 value — current placeholder weakens session token security |
 
 ## Closed
+<!-- sprint 2026-03-28 -->
+| 7 | [sec] | 2026-03-28 | AuditLog RLS: INSERT+SELECT only, no UPDATE/DELETE — DCB0129 immutability |
+| 11 | [sec] | 2026-03-28 | mustChangePassword field + /change-password page — new users redirected on first login |
+| 13 | [fix] | 2026-03-28 | /api/health endpoint returns {status,db,ts} |
+| 19 | [sec] | 2026-03-28 | AUTH_SECRET rotated to openssl rand -base64 32 |
 
 | ID | Tag | Date Closed | Description |
 |----|-----|-------------|-------------|
