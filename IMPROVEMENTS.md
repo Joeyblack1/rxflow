@@ -10,6 +10,9 @@
 | 12 | [arch] | Medium | 2026-03-28 | Switch schema ID default from cuid() to uuid() for consistency with seed data (currently mixed formats) |
 | 15 | [arch] | Medium | 2026-03-28 | Add Prisma Accelerate or switch to pooler once Supabase pooler confirmed working — direct connections exhaust 60-connection free-tier limit under load |
 | 17 | [ux] | Medium | 2026-03-28 | Test all 5 role views (Prescriber, Nurse, Pharmacist, Admin, Read-Only) — verify sidebar navigation and access control per role |
+| 20 | [sec] | High | 2026-03-28 | Login rate limiting — max 5 attempts / 15 min per IP to prevent brute force |
+| 21 | [ux] | High | 2026-03-28 | CliniVoice-AI: "Send to RxFlow" button after prescription action detected — NHS number input + one-click handoff |
+| 22 | [arch] | Medium | 2026-03-28 | Write README.md with prisma.config.ts pattern, seed instructions, and dev setup |
 
 ## Closed
 <!-- sprint 2026-03-28 -->
