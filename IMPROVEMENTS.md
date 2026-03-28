@@ -6,24 +6,23 @@
 |----|-----|----------|------|-------------|
 | 3 | [ideo] | Medium | 2026-03-27 | Consider Vercel Hobby (free) or Pro plan — 100 deploys/day free tier limit will bottleneck active dev |
 | 5 | [arch] | High | 2026-03-27 | Add `prisma generate` to Neon/seed setup docs — DIRECT_URL needed for migrations on Neon |
-| 6 | [link] | High | 2026-03-27 | CliniVoice-AI webhook endpoint `/api/voice` is ready — update CliniVoice to POST to live URL with HMAC secret |
-| 8 | [arch] | Medium | 2026-03-27 | Add Clinical Safety Case Record and Hazard Log (DCB0129 mandatory before any NHS trust pilot) |
-| 9 | [fix] | Medium | 2026-03-27 | Add loading skeletons to allergies page client component |
 | 10 | [test] | Medium | 2026-03-27 | Add Playwright E2E tests: prescribe → verify → administer full flow |
 | 12 | [arch] | Medium | 2026-03-28 | Switch schema ID default from cuid() to uuid() for consistency with seed data (currently mixed formats) |
-| 14 | [link] | High | 2026-03-28 | Update CliniVoice-AI webhook config: RXFLOW_WEBHOOK_URL=https://rxflow-kappa.vercel.app/api/voice |
 | 15 | [arch] | Medium | 2026-03-28 | Add Prisma Accelerate or switch to pooler once Supabase pooler confirmed working — direct connections exhaust 60-connection free-tier limit under load |
-| 16 | [arch] | High | 2026-03-28 | Write Clinical Safety Case Record + Hazard Log (DCB0129 legal requirement before any NHS trust pilot) |
 | 17 | [ux] | Medium | 2026-03-28 | Test all 5 role views (Prescriber, Nurse, Pharmacist, Admin, Read-Only) — verify sidebar navigation and access control per role |
-| 18 | [gdpr] | High | 2026-03-28 | Write Data Protection Impact Assessment (DPIA) — required under UK GDPR/Caldicott for any system processing NHS patient data |
-| 19 | [sec] | High | 2026-03-28 | Rotate AUTH_SECRET to proper openssl rand -base64 32 value — current placeholder weakens session token security |
 
 ## Closed
 <!-- sprint 2026-03-28 -->
 | 7 | [sec] | 2026-03-28 | AuditLog RLS: INSERT+SELECT only, no UPDATE/DELETE — DCB0129 immutability |
+| 8 | [arch] | 2026-03-28 | Clinical Safety Case Record (docs/CLINICAL_SAFETY_CASE_RECORD.md) — 14 hazards, risk matrix, DCB0129 |
+| 16 | [arch] | 2026-03-28 | Same as #8 — CSCR + Hazard Log written |
+| 18 | [gdpr] | 2026-03-28 | DPIA (docs/DPIA.md) — UK GDPR/Caldicott, data inventory, 8 principles, 10 pre-go-live actions |
+| 9 | [fix] | 2026-03-28 | Loading skeletons added to allergies page |
 | 11 | [sec] | 2026-03-28 | mustChangePassword field + /change-password page — new users redirected on first login |
 | 13 | [fix] | 2026-03-28 | /api/health endpoint returns {status,db,ts} |
 | 19 | [sec] | 2026-03-28 | AUTH_SECRET rotated to openssl rand -base64 32 |
+| 6 | [link] | 2026-03-28 | CliniVoice-AI /api/rxflow-prescribe: Gemini drug extraction → HMAC-signed POST to /api/voice |
+| 14 | [link] | 2026-03-28 | RXFLOW_WEBHOOK_URL + RXFLOW_WEBHOOK_SECRET set in CliniVoice-AI .env.local + Vercel |
 
 | ID | Tag | Date Closed | Description |
 |----|-----|-------------|-------------|
