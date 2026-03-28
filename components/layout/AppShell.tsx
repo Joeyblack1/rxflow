@@ -3,6 +3,7 @@
 import { UserRole } from "@/lib/types";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
+import { InactivityGuard } from "@/components/shared/InactivityGuard";
 
 interface AppShellProps {
   user: {
@@ -18,6 +19,7 @@ interface AppShellProps {
 export function AppShell({ user, children }: AppShellProps) {
   return (
     <div className="flex h-screen bg-gray-50">
+      <InactivityGuard />
       <Sidebar user={user} />
       <div className="flex-1 flex flex-col ml-60 min-w-0">
         <TopBar user={user} />

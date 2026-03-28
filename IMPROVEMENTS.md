@@ -9,6 +9,8 @@
 | 12 | [arch] | Medium | 2026-03-28 | Switch schema ID default from cuid() to uuid() for consistency with seed data (currently mixed formats) |
 | 15 | [arch] | Medium | 2026-03-28 | Add Prisma Accelerate or switch to pooler once Supabase pooler confirmed working — direct connections exhaust 60-connection free-tier limit under load |
 | 17 | [ux] | Medium | 2026-03-28 | Test all 5 role views (Prescriber, Nurse, Pharmacist, Admin, Read-Only) — verify sidebar navigation and access control per role |
+| 23 | [ux] | High | 2026-03-28 | Inactivity auto-logout: 15 min warning modal + 20 min hard logout — CSCR H14 planned control |
+| 24 | [arch] | High | 2026-03-28 | Write docs/PRE_PILOT_CHECKLIST.md — consolidate SR-01–SR-10 (CSCR) + D-01–D-10 (DPIA) as single Trust sign-off sheet |
 
 ## Closed
 <!-- sprint 2026-03-28 -->
