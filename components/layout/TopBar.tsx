@@ -1,6 +1,7 @@
 import { Bell, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { UserRole } from "@/lib/types";
+import { SessionTimer } from "@/components/shared/SessionTimer";
 
 interface TopBarProps {
   user: {
@@ -28,6 +29,7 @@ export function TopBar({ user, orgName }: TopBarProps) {
         <span>{orgName ?? "Bassetlaw Community Mental Health Team"}</span>
       </div>
       <div className="ml-auto flex items-center gap-3">
+        <SessionTimer />
         <span className="text-sm text-muted-foreground">
           {user.name}
           <span className="ml-1 text-xs text-gray-400">

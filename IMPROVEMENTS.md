@@ -5,13 +5,15 @@
 | ID | Tag | Priority | Date | Description |
 |----|-----|----------|------|-------------|
 | 3 | [ideo] | Medium | 2026-03-27 | Consider Vercel Hobby (free) or Pro plan — 100 deploys/day free tier limit will bottleneck active dev |
-| 10 | [test] | Medium | 2026-03-27 | Add Playwright E2E tests: prescribe → verify → administer full flow |
 | 12 | [arch] | Medium | 2026-03-28 | Switch schema ID default from cuid() to uuid() for consistency with seed data (currently mixed formats) |
 | 15 | [arch] | Medium | 2026-03-28 | Add Prisma Accelerate or switch to pooler once Supabase pooler confirmed working — direct connections exhaust 60-connection free-tier limit under load |
 | 17 | [ux] | Medium | 2026-03-28 | Test all 5 role views (Prescriber, Nurse, Pharmacist, Admin, Read-Only) — verify sidebar navigation and access control per role |
+| 26 | [arch] | Medium | 2026-03-28 | Replace in-memory rate limiter with Upstash Redis — in-memory store resets on Vercel cold starts, unsafe for production NHS |
 
 ## Closed
 <!-- sprint 2026-03-28 -->
+| 25 | [ux] | 2026-03-28 | SessionTimer in TopBar: shows "Auto-logout in X min" badge when ≤15 min remaining, urgent red at ≤5 |
+| 10 | [test] | 2026-03-28 | Playwright E2E scaffold: e2e/prescribe-verify-administer.spec.ts — 4 tests, requires seed test users to run |
 | 7 | [sec] | 2026-03-28 | AuditLog RLS: INSERT+SELECT only, no UPDATE/DELETE — DCB0129 immutability |
 | 8 | [arch] | 2026-03-28 | Clinical Safety Case Record (docs/CLINICAL_SAFETY_CASE_RECORD.md) — 14 hazards, risk matrix, DCB0129 |
 | 16 | [arch] | 2026-03-28 | Same as #8 — CSCR + Hazard Log written |
