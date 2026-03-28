@@ -5,14 +5,10 @@
 | ID | Tag | Priority | Date | Description |
 |----|-----|----------|------|-------------|
 | 3 | [ideo] | Medium | 2026-03-27 | Consider Vercel Hobby (free) or Pro plan — 100 deploys/day free tier limit will bottleneck active dev |
-| 5 | [arch] | High | 2026-03-27 | Add `prisma generate` to Neon/seed setup docs — DIRECT_URL needed for migrations on Neon |
 | 10 | [test] | Medium | 2026-03-27 | Add Playwright E2E tests: prescribe → verify → administer full flow |
 | 12 | [arch] | Medium | 2026-03-28 | Switch schema ID default from cuid() to uuid() for consistency with seed data (currently mixed formats) |
 | 15 | [arch] | Medium | 2026-03-28 | Add Prisma Accelerate or switch to pooler once Supabase pooler confirmed working — direct connections exhaust 60-connection free-tier limit under load |
 | 17 | [ux] | Medium | 2026-03-28 | Test all 5 role views (Prescriber, Nurse, Pharmacist, Admin, Read-Only) — verify sidebar navigation and access control per role |
-| 20 | [sec] | High | 2026-03-28 | Login rate limiting — max 5 attempts / 15 min per IP to prevent brute force |
-| 21 | [ux] | High | 2026-03-28 | CliniVoice-AI: "Send to RxFlow" button after prescription action detected — NHS number input + one-click handoff |
-| 22 | [arch] | Medium | 2026-03-28 | Write README.md with prisma.config.ts pattern, seed instructions, and dev setup |
 
 ## Closed
 <!-- sprint 2026-03-28 -->
@@ -26,6 +22,10 @@
 | 19 | [sec] | 2026-03-28 | AUTH_SECRET rotated to openssl rand -base64 32 |
 | 6 | [link] | 2026-03-28 | CliniVoice-AI /api/rxflow-prescribe: Gemini drug extraction → HMAC-signed POST to /api/voice |
 | 14 | [link] | 2026-03-28 | RXFLOW_WEBHOOK_URL + RXFLOW_WEBHOOK_SECRET set in CliniVoice-AI .env.local + Vercel |
+| 5 | [arch] | 2026-03-28 | README.md with Prisma v7 setup, prisma.config.ts pattern, seed instructions |
+| 20 | [sec] | 2026-03-28 | Login rate limiting: 5 attempts/15min per IP (proxy.ts + lib/rate-limit.ts) |
+| 21 | [ux] | 2026-03-28 | CliniVoice-AI: Send to RxFlow button on medication actions — NHS number modal + Gemini drug extraction |
+| 22 | [arch] | 2026-03-28 | README.md written with full dev setup, Prisma v7 patterns, compliance table |
 
 | ID | Tag | Date Closed | Description |
 |----|-----|-------------|-------------|
