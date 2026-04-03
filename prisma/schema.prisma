@@ -137,7 +137,7 @@ enum RouteCode {
 }
 
 model Organisation {
-  id          String      @id @default(cuid())
+  id          String      @id @default(uuid())
   name        String
   odsCode     String      @unique
   settingType SettingType
@@ -157,7 +157,7 @@ model Organisation {
 }
 
 model OrgSetting {
-  id             String       @id @default(cuid())
+  id             String       @id @default(uuid())
   organisationId String
   key            String
   value          String
@@ -168,7 +168,7 @@ model OrgSetting {
 }
 
 model Ward {
-  id             String       @id @default(cuid())
+  id             String       @id @default(uuid())
   organisationId String
   name           String
   code           String
@@ -181,7 +181,7 @@ model Ward {
 }
 
 model Bed {
-  id         String      @id @default(cuid())
+  id         String      @id @default(uuid())
   wardId     String
   bedNumber  String
   isOccupied Boolean     @default(false)
@@ -190,7 +190,7 @@ model Bed {
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String    @id @default(uuid())
   organisationId String
   email          String    @unique
   passwordHash   String
@@ -217,7 +217,7 @@ model User {
 }
 
 model UserSession {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   userId    String
   token     String   @unique
   expiresAt DateTime
@@ -228,7 +228,7 @@ model UserSession {
 }
 
 model Patient {
-  id                String    @id @default(cuid())
+  id                String    @id @default(uuid())
   nhsNumber         String    @unique
   hospitalNumber    String?
   firstName         String
@@ -263,7 +263,7 @@ model Patient {
 }
 
 model Admission {
-  id           String    @id @default(cuid())
+  id           String    @id @default(uuid())
   patientId    String
   bedId        String
   wardId       String
@@ -277,7 +277,7 @@ model Admission {
 }
 
 model Allergy {
-  id                 String          @id @default(cuid())
+  id                 String          @id @default(uuid())
   patientId          String
   allergyType        AllergyType
   status             AllergyStatus   @default(ACTIVE)
@@ -297,7 +297,7 @@ model Allergy {
 }
 
 model DMDProduct {
-  id            String     @id @default(cuid())
+  id            String     @id @default(uuid())
   vtmId         String?
   vmpId         String     @unique
   ampId         String?
@@ -321,7 +321,7 @@ model DMDProduct {
 }
 
 model FormularyItem {
-  id             String       @id @default(cuid())
+  id             String       @id @default(uuid())
   organisationId String
   dmdProductId   String
   isRestricted   Boolean      @default(false)
@@ -334,7 +334,7 @@ model FormularyItem {
 }
 
 model Prescription {
-  id                   String             @id @default(cuid())
+  id                   String             @id @default(uuid())
   patientId            String
   prescriberId         String
   pharmacistId         String?
@@ -373,7 +373,7 @@ model Prescription {
 }
 
 model PrescriptionItem {
-  id                  String        @id @default(cuid())
+  id                  String        @id @default(uuid())
   prescriptionId      String
   dmdProductId        String
   dose                String
@@ -403,7 +403,7 @@ model PrescriptionItem {
 }
 
 model MAREntry {
-  id                 String                 @id @default(cuid())
+  id                 String                 @id @default(uuid())
   prescriptionItemId String
   scheduledAt        DateTime
   administeredAt     DateTime?
@@ -427,7 +427,7 @@ model MAREntry {
 }
 
 model DrugInteraction {
-  id           String              @id @default(cuid())
+  id           String              @id @default(uuid())
   drug1VtmId   String
   drug2VtmId   String
   severity     InteractionSeverity
@@ -443,7 +443,7 @@ model DrugInteraction {
 }
 
 model ClozapineMonitoring {
-  id             String                @id @default(cuid())
+  id             String                @id @default(uuid())
   patientId      String                @unique
   cpmsNumber     String?
   registeredAt   DateTime?
@@ -454,7 +454,7 @@ model ClozapineMonitoring {
 }
 
 model ClozapineResultEntry {
-  id                   String                @id @default(cuid())
+  id                   String                @id @default(uuid())
   monitoringId         String
   enteredById          String
   resultDate           DateTime
@@ -473,7 +473,7 @@ model ClozapineResultEntry {
 }
 
 model AuditLog {
-  id             String   @id @default(cuid())
+  id             String   @id @default(uuid())
   timestamp      DateTime @default(now())
   userId         String?
   patientId      String?

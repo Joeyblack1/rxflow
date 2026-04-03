@@ -5,7 +5,6 @@
 | ID | Tag | Priority | Date | Description |
 |----|-----|----------|------|-------------|
 | 3 | [ideo] | Medium | 2026-03-27 | Consider Vercel Hobby (free) or Pro plan — 100 deploys/day free tier limit will bottleneck active dev |
-| 12 | [arch] | Medium | 2026-03-28 | Switch schema ID default from cuid() to uuid() for consistency with seed data (currently mixed formats) |
 | 15 | [arch] | Medium | 2026-03-28 | Add Prisma Accelerate or switch to pooler once Supabase pooler confirmed working — direct connections exhaust 60-connection free-tier limit under load |
 
 ## Closed
@@ -14,6 +13,7 @@
 | 10 | [test] | 2026-03-28 | Playwright E2E: prescribe-verify-administer.spec.ts (4 tests) + role-views.spec.ts (6 tests) |
 | 26 | [arch] | 2026-03-28 | Upstash Redis rate limiter: lib/rate-limit.ts uses Redis when UPSTASH_* env vars present, in-memory fallback otherwise |
 | 17 | [ux] | 2026-03-28 | Role-view E2E: e2e/role-views.spec.ts covers all 5 roles + unauthenticated redirect |
+| 12 | [arch] | 2026-03-28 | All 18 schema models switched from cuid() to uuid() — consistent IDs, no DB migration needed |
 | 7 | [sec] | 2026-03-28 | AuditLog RLS: INSERT+SELECT only, no UPDATE/DELETE — DCB0129 immutability |
 | 8 | [arch] | 2026-03-28 | Clinical Safety Case Record (docs/CLINICAL_SAFETY_CASE_RECORD.md) — 14 hazards, risk matrix, DCB0129 |
 | 16 | [arch] | 2026-03-28 | Same as #8 — CSCR + Hazard Log written |
